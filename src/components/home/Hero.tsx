@@ -1,11 +1,30 @@
 import React, { useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [index, setIndex] = React.useState(0);
+
+  const services = [
+    "Websites",
+    "ML Solutions",
+    "Thumbnails",
+    "3D Models",
+    "Graphic Designing",
+    "AI Chatbots",
+    "Dashboards",
+    "Database Management"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % services.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,101 +33,130 @@ export const Hero: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
-    const particles: Array<{
+    const resize_canvas = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    };
+
+    window.addEventListener('resize', resize_canvas);
+    resize_canvas();
+
+    // Neural Mesh Configuration
+    const particleCount = 60;
+    const connectionDistance = 200;
+    const mouseDistance = 250;
+
+    interface Particle {
       x: number;
       y: number;
+      z: number; // Depth factor
       vx: number;
       vy: number;
-      radius: number;
-    }> = [];
-
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 1,
-      });
+      baseRadius: number;
     }
 
-    let mouseX = 0;
-    let mouseY = 0;
+    const particles: Particle[] = [];
+
+    const initParticles = () => {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          z: Math.random() * 2 + 0.5, // Depth: 0.5 to 2.5
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          baseRadius: Math.random() * 2 + 1,
+        });
+      }
+    };
+
+    initParticles();
+
+    let mouseX = -1000;
+    let mouseY = -1000;
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Animation Loop
+    let animationFrameId: number;
+
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
 
-      // Draw connections
-      particles.forEach((particle, i) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+      const themeColor = theme === 'dark'
+        ? { r: 0, g: 255, b: 255 } // Cyan
+        : { r: 59, g: 130, b: 246 }; // Blue
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+      // Update and Draw Particles
+      particles.forEach((p, i) => {
+        // Movement
+        p.x += p.vx * p.z; // Move faster if closer (higher z)
+        p.y += p.vy * p.z;
 
-        // Mouse interaction
-        const dx = mouseX - particle.x;
-        const dy = mouseY - particle.y;
+        // Bounce off edges
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        // Mouse Repulsion
+        const dx = mouseX - p.x;
+        const dy = mouseY - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
-          particle.x -= dx * 0.01;
-          particle.y -= dy * 0.01;
+
+        if (dist < mouseDistance) {
+          const forceDirectionX = dx / dist;
+          const forceDirectionY = dy / dist;
+          const force = (mouseDistance - dist) / mouseDistance;
+          p.vx -= forceDirectionX * force * 0.05;
+          p.vy -= forceDirectionY * force * 0.05;
         }
 
-        // Draw particle
+        // Draw Point
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = theme === 'dark'
-          ? 'rgba(0, 255, 255, 0.5)'
-          : 'rgba(59, 130, 246, 0.5)';
+        const radius = p.baseRadius * (p.z * 0.5); // Larger if closer
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${themeColor.r}, ${themeColor.g}, ${themeColor.b}, ${0.2 * p.z})`;
         ctx.fill();
 
-        // Draw connections
-        particles.forEach((otherParticle, j) => {
-          if (i !== j) {
-            const dx = particle.x - otherParticle.x;
-            const dy = particle.y - otherParticle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+        // Draw Connections
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx2 = p.x - p2.x;
+          const dy2 = p.y - p2.y;
+          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-            if (distance < 120) {
-              ctx.beginPath();
-              ctx.moveTo(particle.x, particle.y);
-              ctx.lineTo(otherParticle.x, otherParticle.y);
-              ctx.strokeStyle = theme === 'dark'
-                ? `rgba(0, 255, 255, ${0.2 - distance / 600})`
-                : `rgba(59, 130, 246, ${0.2 - distance / 600})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
+          if (dist2 < connectionDistance) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            const opacity = 1 - dist2 / connectionDistance;
+            ctx.strokeStyle = `rgba(${themeColor.r}, ${themeColor.g}, ${themeColor.b}, ${opacity * 0.1 * p.z})`;
+            ctx.lineWidth = 1 * p.z; // Thicker if closer
+            ctx.stroke();
           }
-        });
+        }
       });
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-
     return () => {
+      window.removeEventListener('resize', resize_canvas);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [theme]);
 
@@ -197,23 +245,30 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           We Build{' '}
-          <span
-            style={{
-              backgroundImage:
-                theme === 'dark'
-                  ? 'linear-gradient(90deg, #00ffff, #a855f7, #ec4899)'
-                  : 'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              color: 'transparent',
-              display: 'inline-block',
-            }}
-          >
-            Intelligent
-          </span>
           <br />
-          Digital Experiences
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={services[index]}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                backgroundImage:
+                  theme === 'dark'
+                    ? 'linear-gradient(90deg, #00ffff, #a855f7, #ec4899)'
+                    : 'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+                display: 'inline-block',
+                minHeight: '1.2em'
+              }}
+            >
+              {services[index]}
+            </motion.span>
+          </AnimatePresence>
         </motion.h1>
 
         <motion.p

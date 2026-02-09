@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LoadingScreen } from '@/components/LoadingScreen';
@@ -16,6 +16,7 @@ import { EcommercePortfolio } from '@/pages/portfolio/EcommercePortfolio';
 import { AIChatbotsPortfolio } from '@/pages/portfolio/AIChatbotsPortfolio';
 import { BrandIdentityPortfolio } from '@/pages/portfolio/BrandIdentityPortfolio';
 import { VRExperiencePortfolio } from '@/pages/portfolio/VRExperiencePortfolio';
+import { Chatbot } from '@/components/Chatbot';
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           </Routes>
 
           <Footer />
+          <Chatbot />
         </div>
       </Router>
     </ThemeProvider>

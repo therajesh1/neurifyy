@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Target, Eye, Heart, Zap, Users, Award } from 'lucide-react';
+import { Target, Eye, Heart, Zap, Users } from 'lucide-react';
 
 const values = [
   {
@@ -26,37 +26,14 @@ const values = [
   },
 ];
 
-const teamMembers = [
-  {
-    name: 'Alex Chen',
-    role: 'CEO & AI Strategist',
-    description: 'Leading the vision for AI-powered business transformation.',
-  },
-  {
-    name: 'Sarah Martinez',
-    role: 'Head of Machine Learning',
-    description: 'Pioneering advanced ML solutions for complex challenges.',
-  },
-  {
-    name: 'David Kumar',
-    role: 'Creative Director',
-    description: 'Crafting beautiful experiences that merge design and technology.',
-  },
-  {
-    name: 'Emily Johnson',
-    role: 'Lead Developer',
-    description: 'Building robust, scalable solutions with cutting-edge tech.',
-  },
-];
+
 
 export const About: React.FC = () => {
   const { theme } = useTheme();
   const missionRef = useRef(null);
   const valuesRef = useRef(null);
-  const teamRef = useRef(null);
   const missionInView = useInView(missionRef, { once: true, amount: 0.3 });
   const valuesInView = useInView(valuesRef, { once: true, amount: 0.2 });
-  const teamInView = useInView(teamRef, { once: true, amount: 0.2 });
 
   return (
     <div
@@ -335,104 +312,7 @@ export const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Team */}
-      <section ref={teamRef} className="max-w-7xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={teamInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <h2
-            className="text-5xl mb-6 transition-colors duration-500"
-            style={{
-              color: theme === 'dark' ? '#ffffff' : '#1f2937',
-            }}
-          >
-            Meet Our{' '}
-            <span
-              style={{
-                background:
-                  theme === 'dark'
-                    ? 'linear-gradient(90deg, #00ffff, #a855f7)'
-                    : 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Team
-            </span>
-          </h2>
-        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member, index) => (
-            <motion.div
-              key={member.name}
-              className="group"
-              initial={{ opacity: 0, y: 50 }}
-              animate={teamInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <motion.div
-                className="p-8 rounded-2xl text-center transition-all duration-500"
-                style={{
-                  backgroundColor:
-                    theme === 'dark'
-                      ? 'rgba(255, 255, 255, 0.03)'
-                      : 'rgba(0, 0, 0, 0.02)',
-                  border:
-                    theme === 'dark'
-                      ? '1px solid rgba(0, 255, 255, 0.1)'
-                      : '1px solid rgba(59, 130, 246, 0.1)',
-                  backdropFilter: 'blur(10px)',
-                }}
-                whileHover={{ y: -10 }}
-              >
-                <motion.div
-                  className="w-24 h-24 mx-auto mb-6 rounded-full transition-all duration-500"
-                  style={{
-                    background:
-                      theme === 'dark'
-                        ? 'linear-gradient(135deg, #00ffff, #a855f7)'
-                        : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                  }}
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <h3
-                  className="text-xl mb-2 transition-colors duration-500"
-                  style={{
-                    color: theme === 'dark' ? '#ffffff' : '#1f2937',
-                  }}
-                >
-                  {member.name}
-                </h3>
-                <p
-                  className="text-sm mb-3 transition-colors duration-500"
-                  style={{
-                    color: theme === 'dark' ? '#00ffff' : '#3b82f6',
-                  }}
-                >
-                  {member.role}
-                </p>
-                <p
-                  className="text-sm transition-colors duration-500"
-                  style={{
-                    color:
-                      theme === 'dark'
-                        ? 'rgba(255, 255, 255, 0.6)'
-                        : 'rgba(31, 41, 55, 0.6)',
-                  }}
-                >
-                  {member.description}
-                </p>
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 };
