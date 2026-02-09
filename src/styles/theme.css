@@ -1,7 +1,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-size: 16px;
+  --font-size: 18px;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
@@ -208,14 +208,17 @@
   }
 
   /* Form Element Base Styles */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     color: var(--foreground);
     background-color: transparent;
   }
 
   ::placeholder {
     color: var(--muted-foreground);
-    opacity: 1; /* Firefox */
+    opacity: 1;
+    /* Firefox */
   }
 
   /* Ensure buttons have readable text */

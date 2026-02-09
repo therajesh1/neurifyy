@@ -59,7 +59,7 @@ export const Portfolio: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.span
-            className="text-sm uppercase tracking-widest mb-4 inline-block transition-colors duration-500"
+            className="text-lg uppercase tracking-widest mb-4 inline-block transition-colors duration-500"
             style={{
               color: theme === 'dark' ? '#00ffff' : '#3b82f6',
             }}
@@ -67,7 +67,7 @@ export const Portfolio: React.FC = () => {
             Portfolio
           </motion.span>
           <h2
-            className="text-5xl md:text-6xl mb-6 transition-colors duration-500"
+            className="text-6xl md:text-7xl mb-6 transition-colors duration-500"
             style={{
               color: theme === 'dark' ? '#ffffff' : '#1f2937',
             }}
@@ -106,7 +106,7 @@ export const Portfolio: React.FC = () => {
             {portfolioItems.map((item, index) => (
               <motion.div
                 key={item.title}
-                className="relative flex-shrink-0 w-[400px] h-[500px] rounded-2xl overflow-hidden group cursor-pointer"
+                className="relative flex-shrink-0 w-[500px] h-[600px] rounded-2xl overflow-hidden group cursor-pointer"
                 initial={{ opacity: 0, x: 50 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -155,7 +155,7 @@ export const Portfolio: React.FC = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <span
-                      className="text-sm uppercase tracking-wider mb-2 inline-block transition-colors duration-500"
+                      className="text-lg uppercase tracking-wider mb-2 inline-block transition-colors duration-500"
                       style={{
                         color: theme === 'dark' ? '#00ffff' : '#3b82f6',
                       }}
@@ -164,7 +164,7 @@ export const Portfolio: React.FC = () => {
                     </span>
                   </motion.div>
 
-                  <h3 className="text-2xl mb-4 text-white">{item.title}</h3>
+                  <h3 className="text-4xl mb-4 text-white">{item.title}</h3>
 
                   {/* View Button */}
                   <motion.div

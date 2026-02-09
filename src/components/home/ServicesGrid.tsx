@@ -28,7 +28,7 @@ export const ServicesGrid: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.span
-            className="text-sm uppercase tracking-widest mb-4 inline-block transition-colors duration-500"
+            className="text-lg uppercase tracking-widest mb-4 inline-block transition-colors duration-500"
             style={{
               color: theme === 'dark' ? '#00ffff' : '#3b82f6',
             }}
@@ -36,7 +36,7 @@ export const ServicesGrid: React.FC = () => {
             Our Services
           </motion.span>
           <h2
-            className="text-5xl md:text-6xl mb-6 transition-colors duration-500"
+            className="text-6xl md:text-7xl mb-6 transition-colors duration-500"
             style={{
               color: theme === 'dark' ? '#ffffff' : '#1f2937',
             }}
@@ -58,7 +58,7 @@ export const ServicesGrid: React.FC = () => {
             </span>
           </h2>
           <p
-            className="text-xl max-w-3xl mx-auto transition-colors duration-500"
+            className="text-2xl max-w-3xl mx-auto transition-colors duration-500"
             style={{
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(31, 41, 55, 0.7)',
             }}
@@ -138,7 +138,7 @@ export const ServicesGrid: React.FC = () => {
 
                     {/* Title */}
                     <h3
-                      className="text-xl mb-3 transition-colors duration-500"
+                      className="text-2xl mb-3 transition-colors duration-500"
                       style={{
                         color: theme === 'dark' ? '#ffffff' : '#1f2937',
                       }}
@@ -148,7 +148,7 @@ export const ServicesGrid: React.FC = () => {
 
                     {/* Description */}
                     <p
-                      className="text-sm leading-relaxed transition-colors duration-500"
+                      className="text-base leading-relaxed transition-colors duration-500"
                       style={{
                         color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(31, 41, 55, 0.6)',
                       }}

@@ -2,11 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Hero: React.FC = () => {
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [index, setIndex] = React.useState(0);
+  const navigate = useNavigate();
 
   const services = [
     "Websites",
@@ -236,7 +238,7 @@ export const Hero: React.FC = () => {
         <motion.h1
           className="mb-6 transition-colors duration-500"
           style={{
-            fontSize: 'clamp(2.5rem, 8vw, 6rem)',
+            fontSize: 'clamp(2rem, 6vw, 5rem)',
             lineHeight: 1.1,
             color: theme === 'dark' ? '#ffffff' : '#1f2937',
           }}
@@ -272,7 +274,7 @@ export const Hero: React.FC = () => {
         </motion.h1>
 
         <motion.p
-          className="text-xl mb-12 max-w-3xl mx-auto transition-colors duration-500"
+          className="text-2xl mb-12 max-w-3xl mx-auto transition-colors duration-500"
           style={{
             color: theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(31, 41, 55, 0.7)',
           }}
@@ -311,6 +313,7 @@ export const Hero: React.FC = () => {
                   : '0 6px 30px rgba(59, 130, 246, 0.4)',
             }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/services')}
           >
             Get Started
             <ArrowRight className="w-5 h-5" />
@@ -329,41 +332,13 @@ export const Hero: React.FC = () => {
               backgroundColor: theme === 'dark' ? 'rgba(0, 255, 255, 0.1)' : 'rgba(59, 130, 246, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/portfolio')}
           >
             View Portfolio
           </motion.button>
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-      >
-        <motion.div
-          className="w-6 h-10 rounded-full border-2 flex items-start justify-center p-2 transition-colors duration-500"
-          style={{
-            borderColor: theme === 'dark' ? 'rgba(0, 255, 255, 0.3)' : 'rgba(59, 130, 246, 0.3)',
-          }}
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        >
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{
-              backgroundColor: theme === 'dark' ? '#00ffff' : '#3b82f6',
-            }}
-          />
-        </motion.div>
-      </motion.div>
     </section >
   );
 };
