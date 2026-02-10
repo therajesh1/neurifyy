@@ -44,6 +44,7 @@ export const Portfolio: React.FC = () => {
 
   return (
     <section
+      id="portfolio"
       ref={ref}
       className="py-32 px-6 overflow-hidden transition-colors duration-500"
       style={{

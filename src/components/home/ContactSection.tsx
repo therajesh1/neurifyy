@@ -29,6 +29,7 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section
+      id="contact"
       ref={ref}
       className="py-32 px-6 relative overflow-hidden transition-colors duration-500"
       style={{

@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+
 
 export const Hero: React.FC = () => {
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [index, setIndex] = React.useState(0);
-  const navigate = useNavigate();
+
 
   const services = [
     "Websites",
@@ -313,7 +313,7 @@ export const Hero: React.FC = () => {
                   : '0 6px 30px rgba(59, 130, 246, 0.4)',
             }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/services')}
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Get Started
             <ArrowRight className="w-5 h-5" />
@@ -332,7 +332,7 @@ export const Hero: React.FC = () => {
               backgroundColor: theme === 'dark' ? 'rgba(0, 255, 255, 0.1)' : 'rgba(59, 130, 246, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/portfolio')}
+            onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
           >
             View Portfolio
           </motion.button>
