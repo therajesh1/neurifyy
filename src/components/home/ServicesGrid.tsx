@@ -9,7 +9,7 @@ import { services } from '@/data/services';
 export const ServicesGrid: React.FC = () => {
   const { theme } = useTheme();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
     <section
@@ -36,7 +36,7 @@ export const ServicesGrid: React.FC = () => {
             Our Services
           </motion.span>
           <h2
-            className="text-6xl md:text-7xl mb-6 transition-colors duration-500"
+            className="text-4xl md:text-6xl lg:text-7xl mb-6 transition-colors duration-500"
             style={{
               color: theme === 'dark' ? '#ffffff' : '#1f2937',
             }}
